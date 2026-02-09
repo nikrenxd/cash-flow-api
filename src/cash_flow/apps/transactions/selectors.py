@@ -1,6 +1,6 @@
 from django.db.models import QuerySet
 
-from src.cash_flow.apps.transactions.exceptions import TransactionObjectNotFound
+from src.cash_flow.apps.transactions.exceptions import TransactionObjectDoesNotExist
 from src.cash_flow.apps.transactions.models import Transaction
 
 
@@ -15,4 +15,4 @@ class TransactionSelector:
         try:
             return Transaction.objects.get(id=transaction_id)
         except Transaction.DoesNotExist:
-            raise TransactionObjectNotFound
+            raise TransactionObjectDoesNotExist
