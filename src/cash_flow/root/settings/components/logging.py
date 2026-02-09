@@ -36,5 +36,10 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
+        "src.cash_flow.apps.comments": {
+            "level": "INFO",
+            "handlers": ["console"],
+            "propagate": False,
+        },
     },
 }
