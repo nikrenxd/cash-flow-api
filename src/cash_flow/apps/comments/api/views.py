@@ -5,6 +5,7 @@ from src.cash_flow.apps.comments.api.serializers import (
     CommentCreateSerializer,
     CommentUpdateSerializer,
 )
+from src.cash_flow.apps.comments.permissions import IsAllowedAddCommentsToTransaction
 from src.cash_flow.apps.comments.selectors import CommentSelector
 from src.cash_flow.apps.comments.services import CommentService
 from src.cash_flow.common.permissions import IsOwnerPermission
@@ -12,7 +13,10 @@ from src.cash_flow.common.permissions import IsOwnerPermission
 
 class CommentListCreateView(generics.ListCreateAPIView):
     serializer_class = CommentCreateSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (
+        IsAuthenticated,
+        IsAllowedAddCommentsToTransaction,
+    )
 
     def get_queryset(self):
         return CommentSelector().list_transaction_comments(
