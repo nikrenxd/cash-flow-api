@@ -1,0 +1,2 @@
+class CommentObjectDoesNotExist(Exception):
+    pass

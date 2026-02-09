@@ -1,0 +1,76 @@
+services:
+  web:
+    &web
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    environment:
+      - DJANGO_ENV=development
+    env_file:
+      - .env
+    command: src/entrypoint.sh
+    volumes:
+      - ./src/:/app/src/
+    ports:
+      - "${APP_PORT}:8000"
+    depends_on:
+      - database
+      - redis
+      - rabbitmq
+    networks:
+      - cash-flow
+
+  worker:
+    <<: *web
+    ports: [ ]
+    command: uv run celery -A src.cash_flow.root worker --loglevel=info
+  
+  database:
+    image: postgres:18-alpine3.23
+    container_name: postgresdb
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - cash-flow
+
+  redis:
+    image: redis:8-alpine3.21
+    container_name: redis
+    env_file:
+      - .env
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - cash-flow
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: rabbit
+    env_file:
+      - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_DEFAULT_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RMQ_DEFAULT_VHOST}
+    ports:
+      - "${RMQ_PORT}:5672"
+      - "${RMQ_DASHBOARD_PORT}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - cash-flow
+
+
+volumes:
+  pgdata:
+  rabbitmq-data:
+networks:
+  cash-flow:
+    driver: bridge
