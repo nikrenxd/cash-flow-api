@@ -1,8 +1,10 @@
-from rest_framework import generics, mixins, viewsets
+from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from src.cash_flow.apps.comments.api.serializers import (
     CommentCreateSerializer,
+    CommentSerializer,
     CommentUpdateSerializer,
 )
 from src.cash_flow.apps.comments.permissions import IsAllowedAddCommentsToTransaction
@@ -11,10 +13,12 @@ from src.cash_flow.apps.comments.services import CommentService
 from src.cash_flow.common.permissions import IsOwnerPermission
 
 
-class CommentListCreateView(generics.ListCreateAPIView):
-    serializer_class = CommentCreateSerializer
+@extend_schema(tags=["comments"])
+class CommentViewSet(ModelViewSet):
+    serializer_class = CommentSerializer
     permission_classes = (
         IsAuthenticated,
+        IsOwnerPermission,
         IsAllowedAddCommentsToTransaction,
     )
 
@@ -25,9 +29,11 @@ class CommentListCreateView(generics.ListCreateAPIView):
         )
 
     def get_serializer_class(self):
-        match self.request.method:
-            case "post":
+        match self.action:
+            case "create":
                 return CommentCreateSerializer
+            case "update":
+                return CommentUpdateSerializer
 
         return super().get_serializer_class()
 
@@ -40,20 +46,6 @@ class CommentListCreateView(generics.ListCreateAPIView):
         )
 
         serializer.instance = comment
-
-
-class CommentViewSet(
-    viewsets.GenericViewSet,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-):
-    serializer_class = CommentUpdateSerializer
-    permission_classes = (IsAuthenticated, IsOwnerPermission)
-
-    def get_queryset(self):
-        return CommentSelector().list_comments(
-            user_id=self.request.user.id,
-        )
 
     def perform_update(self, serializer):
         data = serializer.validated_data
