@@ -1,5 +1,6 @@
 import logging
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -15,6 +16,7 @@ from src.cash_flow.common.permissions import IsOwnerPermission
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["transactions"])
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     permission_classes = (IsAuthenticated, IsOwnerPermission)

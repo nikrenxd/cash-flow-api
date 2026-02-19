@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -13,7 +13,10 @@ from src.cash_flow.apps.comments.services import CommentService
 from src.cash_flow.common.permissions import IsOwnerPermission
 
 
-@extend_schema(tags=["comments"])
+@extend_schema(
+    tags=["comments"],
+    parameters=[OpenApiParameter(name="id", type=int, location="path")],
+)
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (

@@ -25,6 +25,7 @@ from src.cash_flow.apps.users.tasks import task_send_activation_email
 logger = logging.getLogger(__name__)
 
 
+@extend_schema(tags=["users"])
 class UserViewSet(GenericViewSet, CreateModelMixin):
     queryset = UserSelector().list_users()
     serializer_class = UserCreateSerializer
@@ -51,6 +52,7 @@ class UserViewSet(GenericViewSet, CreateModelMixin):
         )
 
 
+@extend_schema(tags=["users"])
 class UserActivateView(APIView):
     @extend_schema(
         request=None,
