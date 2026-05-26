@@ -16,3 +16,6 @@ class TransactionSelector:
             return Transaction.objects.get(id=transaction_id)
         except Transaction.DoesNotExist:
             raise TransactionObjectDoesNotExist
+
+    def is_transaction_exists(self, transaction_id: int, user_id: int) -> bool:
+        return Transaction.objects.filter(id=transaction_id, user=user_id).exists()
