@@ -1,6 +1,8 @@
 from django.db import transaction
 
+from src.cash_flow.apps.comments.exceptions import CommentActionFailed
 from src.cash_flow.apps.comments.models import Comment
+from src.cash_flow.apps.transactions.selectors import TransactionSelector
 
 
 class CommentService:
@@ -11,6 +13,13 @@ class CommentService:
         transaction_id: int,
         body: str,
     ) -> Comment:
+        is_transaction_exists = TransactionSelector().is_transaction_exists(
+            transaction_id,
+            user_id,
+        )
+        if not is_transaction_exists:
+            raise CommentActionFailed
+
         new_comment = Comment(
             user_id=user_id,
             transaction_id=transaction_id,

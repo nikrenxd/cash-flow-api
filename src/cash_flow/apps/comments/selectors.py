@@ -5,6 +5,9 @@ from src.cash_flow.apps.comments.models import Comment
 
 
 class CommentSelector:
+    def none_comment(self) -> QuerySet[Comment]:
+        return Comment.objects.none()
+
     def list_transaction_comments(
         self,
         user_id: int,
