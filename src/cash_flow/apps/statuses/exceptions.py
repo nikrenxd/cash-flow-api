@@ -1,0 +1,2 @@
+class StatusObjectDoesNotExist(Exception):
+    pass

@@ -35,6 +35,7 @@ LOCAL_APPS = [
     "src.cash_flow.apps.users",
     "src.cash_flow.apps.transactions",
     "src.cash_flow.apps.comments",
+    "src.cash_flow.apps.statuses",
 ]
 
 INSTALLED_APPS += LOCAL_APPS

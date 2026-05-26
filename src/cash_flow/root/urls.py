@@ -21,8 +21,6 @@ from django.contrib import admin
 from django.urls import URLPattern, URLResolver, include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from src.cash_flow.root.auth.views import LoginView, LogoutView
-
 urlpatterns: list[URLPattern | URLResolver] = [
     path("admin/", admin.site.urls),
 ]
@@ -36,6 +34,7 @@ urlpatterns += [
     path("api/v1/", include("src.cash_flow.apps.users.api.urls")),
     path("api/v1/", include("src.cash_flow.apps.transactions.api.urls")),
     path("api/v1/", include("src.cash_flow.apps.comments.api.urls")),
+    path("api/v1/", include("src.cash_flow.apps.statuses.api.urls")),
 ]
 
 # Docs urls
