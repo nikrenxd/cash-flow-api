@@ -27,14 +27,14 @@ urlpatterns: list[URLPattern | URLResolver] = [
 
 
 # Auth urls
-urlpatterns += [path("", include("src.cash_flow.root.auth.urls"))]
+urlpatterns += [path("", include("cash_flow.root.auth.urls"))]
 
 # Local urls
 urlpatterns += [
-    path("api/v1/", include("src.cash_flow.apps.users.api.urls")),
-    path("api/v1/", include("src.cash_flow.apps.transactions.api.urls")),
-    path("api/v1/", include("src.cash_flow.apps.comments.api.urls")),
-    path("api/v1/", include("src.cash_flow.apps.statuses.api.urls")),
+    path("api/v1/", include("cash_flow.apps.users.api.urls")),
+    path("api/v1/", include("cash_flow.apps.transactions.api.urls")),
+    path("api/v1/", include("cash_flow.apps.comments.api.urls")),
+    path("api/v1/", include("cash_flow.apps.statuses.api.urls")),
 ]
 
 # Docs urls
