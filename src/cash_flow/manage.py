@@ -8,7 +8,7 @@ from pathlib import Path
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.cash_flow.root.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cash_flow.root.settings")
 
     project_root = Path(__file__).resolve().parent.parent.parent
     sys.path.insert(0, str(project_root))

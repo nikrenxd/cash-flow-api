@@ -4,14 +4,14 @@ from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from src.cash_flow.apps.statuses.api.serializers import (
+from cash_flow.apps.statuses.api.serializers import (
     StatusCreateSerializer,
     StatusSerializer,
     StatusUpdateSerializer,
 )
-from src.cash_flow.apps.statuses.filters import StatusFilter
-from src.cash_flow.apps.statuses.selectors import StatusSelector
-from src.cash_flow.apps.statuses.services import StatusService
+from cash_flow.apps.statuses.filters import StatusFilter
+from cash_flow.apps.statuses.selectors import StatusSelector
+from cash_flow.apps.statuses.services import StatusService
 
 
 @extend_schema(tags=["statuses"])
@@ -19,7 +19,6 @@ class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     filterset_class = StatusFilter
 
-    @property
     def get_queryset(self):
         user_id = self.request.user.id
         if self.action == "list_custom_statuses":

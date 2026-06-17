@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from src.cash_flow.apps.users.models import CustomUser as User
-from src.cash_flow.common.send_email import send_email
+from cash_flow.apps.users.models import CustomUser as User
+from cash_flow.common.send_email import send_email
 
 logger = logging.getLogger(__name__)
 

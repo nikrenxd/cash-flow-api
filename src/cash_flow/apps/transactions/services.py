@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.db import transaction
 
-from src.cash_flow.apps.transactions.models import Transaction
+from cash_flow.apps.transactions.models import Transaction
 
 logger = logging.getLogger(__name__)
 

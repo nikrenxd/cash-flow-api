@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from src.cash_flow.apps.statuses.api.views import StatusViewSet
+from cash_flow.apps.statuses.api.views import StatusViewSet
 
 statuses_router = DefaultRouter()
 

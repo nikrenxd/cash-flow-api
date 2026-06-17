@@ -12,15 +12,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from src.cash_flow.apps.users.api.serializers import (
+from cash_flow.apps.users.api.serializers import (
     UserActivateResponseSerializer,
     UserCreateSerializer,
     UserNotActivateResponseSerializer,
 )
-from src.cash_flow.apps.users.exceptions import UserObjectDoesNotExist
-from src.cash_flow.apps.users.selectors import UserSelector
-from src.cash_flow.apps.users.services.users_actions import UserService
-from src.cash_flow.apps.users.tasks import task_send_activation_email
+from cash_flow.apps.users.exceptions import UserObjectDoesNotExist
+from cash_flow.apps.users.selectors import UserSelector
+from cash_flow.apps.users.services.users_actions import UserService
+from cash_flow.apps.users.tasks import task_send_activation_email
 
 logger = logging.getLogger(__name__)
 

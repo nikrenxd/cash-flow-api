@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from src.cash_flow.apps.users.api.views import UserActivateView, UserViewSet
+from cash_flow.apps.users.api.views import UserActivateView, UserViewSet
 
 users_router = DefaultRouter()
 

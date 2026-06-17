@@ -1,8 +1,8 @@
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound
 
-from src.cash_flow.apps.transactions.exceptions import TransactionObjectDoesNotExist
-from src.cash_flow.apps.transactions.selectors import TransactionSelector
+from cash_flow.apps.transactions.exceptions import TransactionObjectDoesNotExist
+from cash_flow.apps.transactions.selectors import TransactionSelector
 
 
 class IsAllowedAddCommentsToTransaction(permissions.BasePermission):

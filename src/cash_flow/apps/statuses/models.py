@@ -1,6 +1,6 @@
 from django.db import models
 
-from src.cash_flow.common.models import BaseModel
+from cash_flow.common.models import BaseModel
 
 
 class Status(BaseModel):

@@ -32,10 +32,10 @@ INSTALLED_APPS = [
 ]
 
 LOCAL_APPS = [
-    "src.cash_flow.apps.users",
-    "src.cash_flow.apps.transactions",
-    "src.cash_flow.apps.comments",
-    "src.cash_flow.apps.statuses",
+    "cash_flow.apps.users",
+    "cash_flow.apps.transactions",
+    "cash_flow.apps.comments",
+    "cash_flow.apps.statuses",
 ]
 
 INSTALLED_APPS += LOCAL_APPS
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "src.cash_flow.root.urls"
+ROOT_URLCONF = "cash_flow.root.urls"
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "src.cash_flow.root.wsgi.application"
+WSGI_APPLICATION = "cash_flow.root.wsgi.application"
 
 
 # Password validation

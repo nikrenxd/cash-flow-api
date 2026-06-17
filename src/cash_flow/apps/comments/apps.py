@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class CommentsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "src.cash_flow.apps.comments"
+    name = "cash_flow.apps.comments"

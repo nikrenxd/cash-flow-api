@@ -3,20 +3,20 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from src.cash_flow.apps.comments.api.serializers import (
+from cash_flow.apps.comments.api.serializers import (
     CommentCreateSerializer,
     CommentSerializer,
     CommentUpdateSerializer,
 )
-from src.cash_flow.apps.comments.exceptions import (
+from cash_flow.apps.comments.exceptions import (
     CommentActionFailed,
     CommentCreationFailed,
     CommentUpdateFailed,
 )
-from src.cash_flow.apps.comments.permissions import IsAllowedAddCommentsToTransaction
-from src.cash_flow.apps.comments.selectors import CommentSelector
-from src.cash_flow.apps.comments.services import CommentService
-from src.cash_flow.common.permissions import IsOwnerPermission
+from cash_flow.apps.comments.permissions import IsAllowedAddCommentsToTransaction
+from cash_flow.apps.comments.selectors import CommentSelector
+from cash_flow.apps.comments.services import CommentService
+from cash_flow.common.permissions import IsOwnerPermission
 
 
 @extend_schema(

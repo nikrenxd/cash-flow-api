@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from src.cash_flow.apps.comments.models import Comment
+from cash_flow.apps.comments.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):

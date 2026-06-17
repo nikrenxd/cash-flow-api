@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
-from src.cash_flow.apps.transactions.exceptions import TransactionObjectDoesNotExist
-from src.cash_flow.apps.transactions.models import Transaction
+from cash_flow.apps.transactions.exceptions import TransactionObjectDoesNotExist
+from cash_flow.apps.transactions.models import Transaction
 
 
 class TransactionSelector:

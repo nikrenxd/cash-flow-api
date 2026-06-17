@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
-from src.cash_flow.apps.comments.exceptions import CommentObjectDoesNotExist
-from src.cash_flow.apps.comments.models import Comment
+from cash_flow.apps.comments.exceptions import CommentObjectDoesNotExist
+from cash_flow.apps.comments.models import Comment
 
 
 class CommentSelector:

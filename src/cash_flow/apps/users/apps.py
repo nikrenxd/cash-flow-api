@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class UsersConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "src.cash_flow.apps.users"
+    name = "cash_flow.apps.users"

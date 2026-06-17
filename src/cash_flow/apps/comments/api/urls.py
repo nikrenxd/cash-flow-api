@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from src.cash_flow.apps.comments.api.views import CommentViewSet
+from cash_flow.apps.comments.api.views import CommentViewSet
 
 comments_router = routers.DefaultRouter()
 comments_router.register(

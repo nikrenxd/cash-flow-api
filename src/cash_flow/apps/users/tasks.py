@@ -2,11 +2,10 @@ import logging
 from smtplib import SMTPException
 
 from celery import shared_task
-from django.http import Http404
 
-from src.cash_flow.apps.users.exceptions import UserObjectDoesNotExist
-from src.cash_flow.apps.users.selectors import UserSelector
-from src.cash_flow.apps.users.services.send_activation_email import (
+from cash_flow.apps.users.exceptions import UserObjectDoesNotExist
+from cash_flow.apps.users.selectors import UserSelector
+from cash_flow.apps.users.services.send_activation_email import (
     send_activation_email,
 )
 

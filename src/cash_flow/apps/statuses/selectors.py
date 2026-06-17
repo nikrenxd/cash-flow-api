@@ -1,7 +1,7 @@
 from django.db.models import Q, QuerySet
 
-from src.cash_flow.apps.statuses.exceptions import StatusObjectDoesNotExist
-from src.cash_flow.apps.statuses.models import Status
+from cash_flow.apps.statuses.exceptions import StatusObjectDoesNotExist
+from cash_flow.apps.statuses.models import Status
 
 
 class StatusSelector:

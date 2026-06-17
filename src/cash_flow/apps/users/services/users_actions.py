@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from src.cash_flow.apps.users.models import CustomUser as User
+from cash_flow.apps.users.models import CustomUser as User
 
 
 class UserService:

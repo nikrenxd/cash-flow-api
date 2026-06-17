@@ -1,6 +1,6 @@
 from django.db import models
 
-from src.cash_flow.common.models import BaseModel
+from cash_flow.common.models import BaseModel
 
 
 class Transaction(BaseModel):
@@ -9,6 +9,11 @@ class Transaction(BaseModel):
 
     user = models.ForeignKey(
         to="users.CustomUser",
+        on_delete=models.CASCADE,
+        related_name="transactions",
+    )
+    status = models.ForeignKey(
+        to="statuses.Status",
         on_delete=models.CASCADE,
         related_name="transactions",
     )

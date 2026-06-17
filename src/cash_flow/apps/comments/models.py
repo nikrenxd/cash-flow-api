@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Index
 
-from src.cash_flow.common.models import BaseModel
+from cash_flow.common.models import BaseModel
 
 
 class Comment(BaseModel):

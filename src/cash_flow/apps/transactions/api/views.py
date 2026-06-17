@@ -4,14 +4,14 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from src.cash_flow.apps.transactions.api.serializers import (
+from cash_flow.apps.transactions.api.serializers import (
     TransactionCreateSerializer,
     TransactionSerializer,
     TransactionUpdateSerializer,
 )
-from src.cash_flow.apps.transactions.selectors import TransactionSelector
-from src.cash_flow.apps.transactions.services import TransactionService
-from src.cash_flow.common.permissions import IsOwnerPermission
+from cash_flow.apps.transactions.selectors import TransactionSelector
+from cash_flow.apps.transactions.services import TransactionService
+from cash_flow.common.permissions import IsOwnerPermission
 
 logger = logging.getLogger(__name__)
 

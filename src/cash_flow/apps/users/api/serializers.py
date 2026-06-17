@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from src.cash_flow.apps.users.models import CustomUser as User
+from cash_flow.apps.users.models import CustomUser as User
 
 
 class UserCreateSerializer(serializers.ModelSerializer[User]):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from src.cash_flow.apps.statuses.models import Status
+from cash_flow.apps.statuses.models import Status
 
 
 class StatusSerializer(serializers.ModelSerializer):

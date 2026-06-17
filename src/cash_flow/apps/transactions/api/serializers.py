@@ -2,7 +2,7 @@ import datetime
 
 from rest_framework import serializers
 
-from src.cash_flow.apps.transactions.models import Transaction
+from cash_flow.apps.transactions.models import Transaction
 
 
 class TransactionCommentsSerializer(serializers.Serializer):

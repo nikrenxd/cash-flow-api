@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from src.cash_flow.apps.transactions.api.views import TransactionViewSet
+from cash_flow.apps.transactions.api.views import TransactionViewSet
 
 transactions_router = routers.DefaultRouter()
 transactions_router.register(

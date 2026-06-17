@@ -1,9 +1,7 @@
 from django.db.models import QuerySet
-from django.shortcuts import get_object_or_404
-from django.utils.http import urlsafe_base64_decode
 
-from src.cash_flow.apps.users.exceptions import UserObjectDoesNotExist
-from src.cash_flow.apps.users.models import CustomUser as User
+from cash_flow.apps.users.exceptions import UserObjectDoesNotExist
+from cash_flow.apps.users.models import CustomUser as User
 
 
 class UserSelector:
@@ -15,7 +13,6 @@ class UserSelector:
             return User.objects.get(email=email)
         except User.DoesNotExist:
             raise UserObjectDoesNotExist
-        # return get_object_or_404(User, email=email)
 
     def get_user_by_uidb(self, uidb64: str) -> User | None:
         try:

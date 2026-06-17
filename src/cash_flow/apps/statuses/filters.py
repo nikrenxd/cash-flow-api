@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from src.cash_flow.apps.statuses.models import Status
+from cash_flow.apps.statuses.models import Status
 
 
 class StatusFilter(filters.FilterSet):

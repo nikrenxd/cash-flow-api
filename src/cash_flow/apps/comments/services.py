@@ -1,8 +1,8 @@
 from django.db import transaction
 
-from src.cash_flow.apps.comments.exceptions import CommentActionFailed
-from src.cash_flow.apps.comments.models import Comment
-from src.cash_flow.apps.transactions.selectors import TransactionSelector
+from cash_flow.apps.comments.exceptions import CommentActionFailed
+from cash_flow.apps.comments.models import Comment
+from cash_flow.apps.transactions.selectors import TransactionSelector
 
 
 class CommentService:

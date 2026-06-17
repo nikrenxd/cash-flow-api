@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class StatusesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "src.cash_flow.apps.statuses"
+    name = "cash_flow.apps.statuses"
