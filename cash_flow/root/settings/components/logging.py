@@ -21,22 +21,22 @@ LOGGING = {
         },
     },
     "loggers": {
-        "src.cash_flow.common": {
+        "cash_flow.common": {
             "level": "INFO",
             "handlers": ["console"],
             "propagate": False,
         },
-        "src.cash_flow.apps.users": {
+        "cash_flow.apps.users": {
             "level": "INFO",
             "handlers": ["console"],
             "propagate": False,
         },
-        "src.cash_flow.apps.transactions": {
+        "cash_flow.apps.transactions": {
             "level": "INFO",
             "handlers": ["console"],
             "propagate": False,
         },
-        "src.cash_flow.apps.comments": {
+        "cash_flow.apps.comments": {
             "level": "INFO",
             "handlers": ["console"],
             "propagate": False,

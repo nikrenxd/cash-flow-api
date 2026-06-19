@@ -5,9 +5,7 @@ from celery import shared_task
 
 from cash_flow.apps.users.exceptions import UserObjectDoesNotExist
 from cash_flow.apps.users.selectors import UserSelector
-from cash_flow.apps.users.services.send_activation_email import (
-    send_activation_email,
-)
+from cash_flow.apps.users.services.send_activation_email import send_activation_email
 
 logger = logging.getLogger(__name__)
 

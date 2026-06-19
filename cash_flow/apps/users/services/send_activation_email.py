@@ -33,6 +33,6 @@ def send_activation_email(user: User) -> None:
         from_email=settings.DEFAULT_FROM_EMAIL,
         subject="Email activation link",
         context=context,
-        template_name="email/activation_email.html",
+        template_name="email/confirm_email.html",
     )
     logger.info(f"Confirmation email send successfully to user {user.id}")

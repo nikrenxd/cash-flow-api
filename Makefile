@@ -1,18 +1,26 @@
 DC = docker compose
 
-.PHONY: migrations migrate run-local run-container run-infra
+DC_ARGS ?= --env-file .env -f docker/docker-compose.yml
+
+.PHONY: migrations migrate run-local run-web run-infra down
 
 migrations:
-	python src/cash_flow/manage.py makemigrations
+	python cash_flow/manage.py makemigrations
 
 migrate:
-	python src/cash_flow/manage.py migrate
+	python cash_flow/manage.py migrate
 
 run-local:
-	python src/cash_flow/manage.py runserver
+	python cash_flow/manage.py runserver
 
-run-container:
-	docker compose up web
+run-web:
+	${DC} $(DC_ARGS) up web
 
 run-infra:
-	docker compose up worker database redis rabbitmq
+	${DC} --env-file .env -f docker/docker-compose.yml up worker database redis rabbitmq
+
+down:
+	${DC} --env-file .env -f docker/docker-compose.yml down
+
+build:
+	${DC} --env-file .env -f docker/docker-compose.yml build --no-cache

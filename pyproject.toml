@@ -50,4 +50,4 @@ module = ["celery.*", "debug_toolbar.toolbar.*"]
 ignore_missing_imports = true
 
 [tool.django-stubs]
-django_settings_module = "src.cash_flow.root.settings"
+django_settings_module = "cash_flow.root.settings"

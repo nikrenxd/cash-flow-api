@@ -3,14 +3,14 @@ services:
     &web
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     environment:
       - DJANGO_ENV=development
     env_file:
       - ../.env
-    command: src/entrypoint.sh
+    command: scripts/entrypoint.sh
     volumes:
-      - ./src/:/app/src/
+      - ../cash_flow/:/app/cash_flow/
     ports:
       - "${APP_PORT}:8000"
     depends_on:
@@ -23,7 +23,7 @@ services:
   worker:
     <<: *web
     ports: [ ]
-    command: uv run celery -A src.cash_flow.root worker --loglevel=info
+    command: uv run celery -A cash_flow.root worker --loglevel=info
   
   database:
     image: postgres:18-alpine3.23
@@ -43,8 +43,6 @@ services:
   redis:
     image: redis:8-alpine3.21
     container_name: cf-redis
-    env_file:
-      - ../.env
     ports:
       - "${REDIS_PORT}:6379"
     networks:
@@ -53,8 +51,6 @@ services:
   rabbitmq:
     image: rabbitmq:4-management-alpine
     container_name: cf-rabbit
-    env_file:
-      - ../.env
     environment:
       RABBITMQ_DEFAULT_USER: ${RMQ_DEFAULT_USER}
       RABBITMQ_DEFAULT_PASS: ${RMQ_DEFAULT_PASS}

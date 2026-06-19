@@ -2,7 +2,7 @@ import os
 
 from celery import Celery
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.cash_flow.root.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cash_flow.root.settings")
 
 app = Celery("cash_flow")
 

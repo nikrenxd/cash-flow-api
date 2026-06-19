@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -12,12 +13,17 @@ from cash_flow.apps.statuses.api.serializers import (
 from cash_flow.apps.statuses.filters import StatusFilter
 from cash_flow.apps.statuses.selectors import StatusSelector
 from cash_flow.apps.statuses.services import StatusService
+from cash_flow.common.permissions import IsOwnerPermission
 
 
 @extend_schema(tags=["statuses"])
 class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     filterset_class = StatusFilter
+    permission_classes = (
+        IsAuthenticated,
+        IsOwnerPermission,
+    )
 
     def get_queryset(self):
         user_id = self.request.user.id

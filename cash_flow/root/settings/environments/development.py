@@ -1,6 +1,6 @@
 import os
 
-from src.cash_flow.root.settings.components.base import INSTALLED_APPS, MIDDLEWARE
+from cash_flow.root.settings.components.base import INSTALLED_APPS, MIDDLEWARE
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-exg7*++as&o$o3$dh2yz3ce6s@xu9x3!u^muon*v+@g4n@wf&4"

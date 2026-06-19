@@ -5,7 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from src.cash_flow.root.auth.serializers import (
+from cash_flow.root.auth.serializers import (
     LoginResponseSerializer,
     LoginSerializer,
     LogoutResponseSerializer,

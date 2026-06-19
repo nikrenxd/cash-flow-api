@@ -13,6 +13,10 @@ FROM base AS final
 RUN apt-get update && apt-get install -y netcat-openbsd
 
 COPY ../pyproject.toml ../uv.lock /app/
+
 RUN uv pip install -r pyproject.toml --group dev
 
-COPY ./src/ /app/src/
+COPY ./scripts/ /app/scripts/
+RUN chmod +x /app/scripts/entrypoint.sh
+
+COPY ./cash_flow/ /app/cash_flow/
