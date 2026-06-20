@@ -8,7 +8,7 @@ users_router = DefaultRouter()
 users_router.register("users", UserViewSet, basename="users")
 urlpatterns = [
     path(
-        "activate/<str:uidb64>/<str:token>/",
+        "activate/<uuid:uuid>/<str:token>/",
         UserActivateView.as_view(),
         name="activate",
     )

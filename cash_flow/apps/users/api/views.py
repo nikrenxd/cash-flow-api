@@ -62,16 +62,11 @@ class UserActivateView(APIView):
             404: UserNotActivateResponseSerializer,
         },
     )
-    def get(
-        self,
-        request: Request,
-        uidb64: str,
-        token: str,
-    ) -> Response:
+    def get(self, request: Request, uuid: str, token: str) -> Response:
         try:
-            user = UserSelector().get_user_by_uidb(uidb64=uidb64)
-        except UserObjectDoesNotExist:
-            raise NotFound(detail="User not found or invalid activation link")
+            user = UserSelector().get_user_by_uuid(uuid=uuid, token=token)
+        except UserObjectDoesNotExist as e:
+            raise NotFound(detail="User not found or invalid activation link") from e
 
         if user.is_active:
             return Response(
@@ -82,15 +77,8 @@ class UserActivateView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-        if not default_token_generator.check_token(user, token):
-            logger.warning(f"Invalid activation token for user: {user.id}")
-            return Response(
-                {
-                    "details": "Invalid or expired activation token",
-                    "activated": False,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        if user is None:
+            raise NotFound(detail="Invalid activation link")
 
         UserService().update_user_active_status(user=user)
         logger.info(f"User: {user.id} has been activated")

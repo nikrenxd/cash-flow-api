@@ -1,12 +1,16 @@
 from django.db import transaction
 
 from cash_flow.apps.users.models import CustomUser as User
+from cash_flow.apps.users.models import UserEmailId
 
 
 class UserService:
     @transaction.atomic
     def create_user(self, email: str, password: str) -> User:
         user = User.objects.create_user(email=email, password=password)
+
+        email_id = UserEmailId(user=user)
+        email_id.save()
 
         return user
 
