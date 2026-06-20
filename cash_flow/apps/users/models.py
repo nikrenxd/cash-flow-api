@@ -1,7 +1,11 @@
+import uuid
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils import timezone
+
+from cash_flow.common.models import BaseModel
 
 
 class CustomUserManager(BaseUserManager["CustomUser"]):
@@ -47,3 +51,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return self.email
+
+
+class UserEmailId(BaseModel):
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="email_id",
+    )
+    email_uuid = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+    )
+
+    def __str__(self) -> str:
+        return str(self.email_uuid)
+
+    class Meta:
+        db_table = "user_email_id"
