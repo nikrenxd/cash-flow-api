@@ -1,4 +1,5 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -56,9 +57,14 @@ class StatusViewSet(viewsets.ModelViewSet):
             **data,
         )
 
+    @extend_schema(
+        tags=["statuses"],
+        parameters=[OpenApiParameter("name", OpenApiTypes.STR, "query")],
+    )
     @action(detail=False, methods=["GET"], url_path="user-statuses")
     def list_custom_statuses(self, request: Request):
-        user_statuses = self.get_queryset
+        user_statuses = self.filter_queryset(self.get_queryset())
+
         serializer = self.get_serializer(user_statuses, many=True)
 
         return Response(status=status.HTTP_200_OK, data=serializer.data)

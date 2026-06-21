@@ -14,8 +14,8 @@ class StatusSelector:
     def get_status_by_id(self, _id: int) -> Status:
         try:
             return Status.objects.get(id=_id)
-        except Status.DoesNotExist:
-            raise StatusObjectDoesNotExist
+        except Status.DoesNotExist as e:
+            raise StatusObjectDoesNotExist from e
 
     def is_status_exists(self, user_id: int, status_id: int) -> bool:
         return Status.objects.filter(
