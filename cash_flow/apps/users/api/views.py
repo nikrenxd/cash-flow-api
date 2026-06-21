@@ -1,6 +1,5 @@
 import logging
 
-from django.contrib.auth.tokens import default_token_generator
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
