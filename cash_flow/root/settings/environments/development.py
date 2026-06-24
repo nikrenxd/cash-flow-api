@@ -16,11 +16,9 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 CORS_ALLOW_CREDENTIALS = True
 
-INSTALLED_APPS = INSTALLED_APPS + [
-    "debug_toolbar",
-]
+INSTALLED_APPS = INSTALLED_APPS + ["silk"]
 
-MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
+MIDDLEWARE = ["silk.middleware.SilkyMiddleware"] + MIDDLEWARE
 
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_SAMESITE = "Lax"
