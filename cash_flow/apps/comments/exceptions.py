@@ -4,16 +4,12 @@ from rest_framework.exceptions import APIException
 from cash_flow.common.exceptions import ObjectDoesNotExist
 
 
-class CommentActionFailed(Exception):
+class CommentCreationError(Exception):
     pass
 
 
-class CommentCreationFailed(APIException):
+class CommentCreationBadRequest(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
-
-
-class CommentUpdateFailed(CommentCreationFailed):
-    pass
 
 
 class CommentObjectDoesNotExist(ObjectDoesNotExist):

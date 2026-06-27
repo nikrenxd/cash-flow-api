@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from cash_flow.apps.comments.exceptions import CommentActionFailed
+from cash_flow.apps.comments.exceptions import CommentCreationError
 from cash_flow.apps.comments.models import Comment
 from cash_flow.apps.transactions.selectors import TransactionSelector
 
@@ -18,7 +18,7 @@ class CommentService:
             user_id,
         )
         if not is_transaction_exists:
-            raise CommentActionFailed
+            raise CommentCreationError
 
         new_comment = Comment(
             user_id=user_id,
@@ -31,7 +31,7 @@ class CommentService:
         return new_comment
 
     @transaction.atomic
-    def update_comment(self, comment: Comment, body: str) -> Comment:  # noqa: F821
+    def update_comment(self, comment: Comment, body: str) -> Comment:
         comment.body = body
         comment.full_clean()
         comment.save()
