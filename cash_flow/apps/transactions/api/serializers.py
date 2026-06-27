@@ -10,7 +10,28 @@ class TransactionCommentsSerializer(serializers.Serializer):
     body = serializers.CharField(max_length=30)
 
 
+class TransactionStatusSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
+
 class TransactionSerializer(serializers.ModelSerializer):
+    status = TransactionStatusSerializer(read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = (
+            "id",
+            "amount",
+            "date",
+            "status",
+            "created_at",
+            "updated_at",
+        )
+
+
+class TransactionDetailSerializer(serializers.ModelSerializer):
+    status = TransactionStatusSerializer(read_only=True)
     comments = TransactionCommentsSerializer(many=True, read_only=True)
 
     class Meta:
@@ -19,6 +40,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "id",
             "amount",
             "date",
+            "status",
             "comments",
             "created_at",
             "updated_at",
@@ -30,10 +52,11 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True,
     )
+    status_id = serializers.IntegerField(required=True, allow_null=False)
 
     class Meta:
         model = Transaction
-        fields = ("amount", "transaction_date")
+        fields = ("amount", "transaction_date", "status_id")
 
     def validate_transaction_date(self, value: datetime.date) -> datetime.date:
         if value is not None and value > datetime.date.today():
@@ -42,6 +65,12 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
             )
 
         return value
+
+    def to_representation(self, instance: Transaction) -> dict:
+        data = super().to_representation(instance)
+        data["transaction_date"] = instance.date
+
+        return data
 
 
 class TransactionUpdateSerializer(TransactionCreateSerializer):
