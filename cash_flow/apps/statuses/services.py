@@ -14,12 +14,14 @@ class StatusService:
     def update_status(
         self,
         status: Status,
-        name: str,
+        name: str | None = None,
         description: str | None = None,
     ) -> Status:
         if description is not None:
             status.description = description
-        status.name = name
+
+        if name is not None:
+            status.name = name
 
         status.full_clean()
         status.save()
