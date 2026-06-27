@@ -67,6 +67,9 @@ class UserActivateView(APIView):
         except UserObjectDoesNotExist as e:
             raise NotFound(detail="User not found or invalid activation link") from e
 
+        if user is None:
+            raise NotFound(detail="Invalid activation link")
+
         if user.is_active:
             return Response(
                 {
@@ -75,9 +78,6 @@ class UserActivateView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-
-        if user is None:
-            raise NotFound(detail="Invalid activation link")
 
         UserService().update_user_active_status(user=user)
         logger.info(f"User: {user.id} has been activated")

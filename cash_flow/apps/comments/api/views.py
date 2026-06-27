@@ -9,9 +9,8 @@ from cash_flow.apps.comments.api.serializers import (
     CommentUpdateSerializer,
 )
 from cash_flow.apps.comments.exceptions import (
-    CommentActionFailed,
-    CommentCreationFailed,
-    CommentUpdateFailed,
+    CommentCreationError,
+    CommentCreationBadRequest,
 )
 from cash_flow.apps.comments.permissions import IsAllowedAddCommentsToTransaction
 from cash_flow.apps.comments.selectors import CommentSelector
@@ -66,13 +65,11 @@ class CommentViewSet(ModelViewSet):
             )
 
             serializer.instance = comment
-        except CommentActionFailed:
-            raise CommentCreationFailed(detail="Comment creation failed")
+        except CommentCreationError as e:
+            raise CommentCreationBadRequest(detail="Comment creation failed") from e
 
     def perform_update(self, serializer):
         data = serializer.validated_data
+        comment = serializer.instance
 
-        try:
-            serializer.instance = CommentService().update_comment(**data)
-        except CommentActionFailed:
-            raise CommentUpdateFailed(detail="Comment update failed")
+        serializer.instance = CommentService().update_comment(comment, **data)
