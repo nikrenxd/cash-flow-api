@@ -1,0 +1,6 @@
+USERNAME = "test_user"
+USER_PASSWORD = "123test4"
+DEFAULT_STATUS = "Default Status"
+DEFAULT_STATUS_DESC = "Default Status Description"
+CUSTOM_STATUS = "User Test Status"
+CUSTOM_STATUS_DESC = "User Test Status Description"
