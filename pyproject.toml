@@ -25,6 +25,7 @@ dev = [
     "django-stubs[compatible-mypy]>=5.2.7",
     "djangorestframework-stubs[compatible-mypy]>=3.16.5",
     "pytest-django>=4.11.1",
+    "pytest-factoryboy>=2.8.1",
     "pytest>=9.0.1",
     "ruff>=0.14.5",
 ]
@@ -44,6 +45,11 @@ select = [
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "cash_flow.root.settings"
+pythonpath = ["."]
+django_find_project = false
 
 [[tool.mypy.overrides]]
 module = ["celery.*", "debug_toolbar.toolbar.*"]
