@@ -1,3 +1,4 @@
+import factory
 from django.contrib.auth.hashers import make_password
 from factory import Sequence, SubFactory
 from factory.django import DjangoModelFactory
@@ -22,3 +23,24 @@ class StatusFactory(DjangoModelFactory):
 
     class Meta:
         model = "statuses.Status"
+
+
+class TransactionFactory(DjangoModelFactory):
+    amount = factory.Faker("pydecimal", left_digits=5, right_digits=2)
+    date = factory.Faker("date")
+
+    user = SubFactory(CustomUserFactory)
+    status = SubFactory(StatusFactory)
+
+    class Meta:
+        model = "transactions.Transaction"
+
+
+class CommentFactory(DjangoModelFactory):
+    body = factory.Faker("text", max_nb_chars=200)
+
+    user = SubFactory(CustomUserFactory)
+    transaction = SubFactory(TransactionFactory)
+
+    class Meta:
+        model = "comments.Comment"
