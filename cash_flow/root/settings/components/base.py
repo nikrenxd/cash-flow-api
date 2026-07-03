@@ -36,6 +36,9 @@ LOCAL_APPS = [
     "cash_flow.apps.transactions",
     "cash_flow.apps.comments",
     "cash_flow.apps.statuses",
+    "cash_flow.apps.transaction_types",
+    "cash_flow.apps.categories",
+    "cash_flow.apps.subcategories",
 ]
 
 INSTALLED_APPS += LOCAL_APPS
