@@ -4,7 +4,7 @@ from cash_flow.common.models import BaseModel
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=125, unique=True)
+    name = models.CharField(max_length=125)
 
     transaction_type = models.ForeignKey(
         "transaction_types.TransactionType",
