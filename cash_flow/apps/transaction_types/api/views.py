@@ -4,18 +4,24 @@ from rest_framework.permissions import IsAuthenticated
 
 from cash_flow.apps.transaction_types.api.serializers import (
     TransactionTypeCreateSerializer,
+    TransactionTypeDetailSerializer,
     TransactionTypeSerializer,
     TransactionTypeUpdateSerializer,
 )
 from cash_flow.apps.transaction_types.selectors import TransactionTypeSelector
 from cash_flow.apps.transaction_types.services import TransactionTypeService
-from cash_flow.common.permissions import IsOwnerPermission
+from cash_flow.common.permissions import (
+    IsOwnerOrDefaultObjectPermission,
+)
 
 
 @extend_schema(tags=["transaction types"])
 class TransactionTypeViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionTypeSerializer
-    permission_classes = (IsAuthenticated, IsOwnerPermission)
+    permission_classes = (
+        IsAuthenticated,
+        IsOwnerOrDefaultObjectPermission,
+    )
 
     def get_queryset(self):
         return TransactionTypeSelector().list_transaction_types(
@@ -23,10 +29,13 @@ class TransactionTypeViewSet(viewsets.ModelViewSet):
         )
 
     def get_serializer_class(self):
-        if self.action == "create":
-            return TransactionTypeCreateSerializer
-        if self.action == "update":
-            return TransactionTypeUpdateSerializer
+        match self.action:
+            case "create":
+                return TransactionTypeCreateSerializer
+            case "update":
+                return TransactionTypeUpdateSerializer
+            case "retrieve":
+                return TransactionTypeDetailSerializer
 
         return super().get_serializer_class()
 

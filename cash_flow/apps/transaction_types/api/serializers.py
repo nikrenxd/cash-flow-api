@@ -23,6 +23,20 @@ class TransactionTypeCreateSerializer(serializers.ModelSerializer):
         )
 
 
+class TransactionTypeCategoriesSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    created_at = serializers.DateTimeField()
+
+
+class TransactionTypeDetailSerializer(serializers.ModelSerializer):
+    categories = TransactionTypeCategoriesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TransactionType
+        fields = ("name", "description", "categories", "created_at", "updated_at")
+
+
 class TransactionTypeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionType

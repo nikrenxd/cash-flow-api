@@ -8,13 +8,16 @@ from rest_framework.response import Response
 
 from cash_flow.apps.statuses.api.serializers import (
     StatusCreateSerializer,
+    StatusDetailSerializer,
     StatusSerializer,
     StatusUpdateSerializer,
 )
 from cash_flow.apps.statuses.filters import StatusFilter
 from cash_flow.apps.statuses.selectors import StatusSelector
 from cash_flow.apps.statuses.services import StatusService
-from cash_flow.common.permissions import IsOwnerPermission
+from cash_flow.common.permissions import (
+    IsOwnerOrDefaultObjectPermission,
+)
 
 
 @extend_schema(tags=["statuses"])
@@ -23,7 +26,7 @@ class StatusViewSet(viewsets.ModelViewSet):
     filterset_class = StatusFilter
     permission_classes = (
         IsAuthenticated,
-        IsOwnerPermission,
+        IsOwnerOrDefaultObjectPermission,
     )
 
     def get_queryset(self):
@@ -39,6 +42,8 @@ class StatusViewSet(viewsets.ModelViewSet):
                 return StatusCreateSerializer
             case "partial_update":
                 return StatusUpdateSerializer
+            case "retrieve":
+                return StatusDetailSerializer
 
         return super().get_serializer_class()
 

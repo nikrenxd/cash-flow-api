@@ -1,12 +1,20 @@
-from django.db.models import Q, QuerySet
+from django.db.models import Prefetch, Q, QuerySet
 
 from cash_flow.apps.statuses.exceptions import StatusObjectDoesNotExist
 from cash_flow.apps.statuses.models import Status
+from cash_flow.apps.transactions.models import Transaction
 
 
 class StatusSelector:
     def list_default_statuses(self, user_id: int) -> QuerySet[Status]:
-        return Status.objects.filter(Q(user_id=None) | Q(user_id=user_id))
+        return Status.objects.prefetch_related(
+            Prefetch(
+                "transactions",
+                queryset=Transaction.objects.filter(user_id=user_id),
+            )
+        ).filter(
+            Q(user_id=None) | Q(user_id=user_id),
+        )
 
     def list_custom_statuses(self, user_id: int) -> QuerySet[Status] | None:
         return Status.objects.filter(user_id=user_id)
