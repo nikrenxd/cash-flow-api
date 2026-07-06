@@ -1,7 +1,10 @@
+from django.db import transaction
+
 from cash_flow.apps.statuses.models import Status
 
 
 class StatusService:
+    @transaction.atomic
     def create_status(
         self, name: str, user_id: int, description: str | None = None
     ) -> Status:
@@ -11,6 +14,7 @@ class StatusService:
 
         return new_status
 
+    @transaction.atomic
     def update_status(
         self,
         status: Status,

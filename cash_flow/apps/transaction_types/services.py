@@ -1,7 +1,10 @@
+from django.db import transaction
+
 from cash_flow.apps.transaction_types.models import TransactionType
 
 
 class TransactionTypeService:
+    @transaction.atomic
     def create_transaction_type(
         self,
         tt_name: str,
@@ -19,6 +22,7 @@ class TransactionTypeService:
 
         return new_transaction_type
 
+    @transaction.atomic
     def update_transaction_type(
         self,
         transaction_type: TransactionType,
