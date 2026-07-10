@@ -36,6 +36,7 @@ urlpatterns += [
     path("api/v1/", include("cash_flow.apps.statuses.api.urls")),
     path("api/v1/", include("cash_flow.apps.transaction_types.api.urls")),
     path("api/v1/", include("cash_flow.apps.categories.api.urls")),
+    path("api/v1/", include("cash_flow.apps.subcategories.api.urls")),
 ]
 
 # Docs urls
