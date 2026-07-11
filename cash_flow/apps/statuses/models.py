@@ -18,6 +18,7 @@ class Status(BaseModel):
             models.Index(fields=["created_at"]),
         ]
         ordering = ["-created_at"]
+        db_table = "statuses"
 
     def __str__(self):
         return self.name
