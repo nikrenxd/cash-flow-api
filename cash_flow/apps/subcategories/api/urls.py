@@ -12,5 +12,5 @@ subcategories_router.register(
 )
 
 urlpatterns = [
-    path("categories/<int:subcategory_id>/", include(subcategories_router.urls)),
+    path("categories/<int:category_id>/", include(subcategories_router.urls)),
 ]
