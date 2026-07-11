@@ -6,10 +6,7 @@ from cash_flow.apps.subcategories.models import Subcategory
 class SubcategoryService:
     @transaction.atomic
     def create(
-        self,
-        subcategory_name: str,
-        user_id: int,
-        category_id: int,
+        self, subcategory_name: str, user_id: int, category_id: int
     ) -> Subcategory:
         new_subcategory = Subcategory(
             name=subcategory_name,
