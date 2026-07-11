@@ -12,10 +12,10 @@ class IsCategoryBelongsToUser(permissions.BasePermission):
             return False
 
         try:
-            category = CategorySelector().get_category(
-                category_id=category_id,
-                user_id=request.user.id,
-            )
+            category = CategorySelector().get_category(category_id=category_id)
+
+            if category.user_id is None:
+                return True
 
             return category.user.id == request.user.id
         except CategoryObjectDoesNotExist as e:
