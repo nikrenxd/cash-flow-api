@@ -16,6 +16,8 @@ class SubcategoryCreateSerializer(serializers.ModelSerializer):
 
 
 class SubcategoryUpdateSerializer(serializers.ModelSerializer):
+    category_id = serializers.IntegerField(required=True, allow_null=False)
+
     class Meta:
         model = Subcategory
         fields = ("name", "category_id")
