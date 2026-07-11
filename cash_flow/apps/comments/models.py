@@ -20,3 +20,4 @@ class Comment(BaseModel):
     class Meta:
         indexes = [Index(fields=["created_at"])]
         ordering = ["-created_at"]
+        db_table = "comments"

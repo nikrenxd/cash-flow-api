@@ -17,6 +17,13 @@ class Transaction(BaseModel):
         on_delete=models.CASCADE,
         related_name="transactions",
     )
+    subcategory = models.ForeignKey(
+        to="subcategories.Subcategory",
+        on_delete=models.CASCADE,
+        related_name="transactions",
+        null=True,
+        blank=True,
+    )
 
     def __str__(self):
         return f"Transaction with id: {self.id}; Amount: {self.amount};"
@@ -26,3 +33,4 @@ class Transaction(BaseModel):
             models.Index(fields=["amount", "created_at"]),
         ]
         ordering = ["amount", "-created_at"]
+        db_table = "transactions"
