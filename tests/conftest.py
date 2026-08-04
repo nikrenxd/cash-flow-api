@@ -7,16 +7,22 @@ from rest_framework.test import APIClient
 from cash_flow.apps.statuses.models import Status
 from tests import constants
 from tests.factories import (
+    CategoryFactory,
     CommentFactory,
     CustomUserFactory,
     StatusFactory,
+    SubcategoryFactory,
     TransactionFactory,
+    TransactionTypeFactory,
 )
 
 register(CustomUserFactory)
 register(StatusFactory)
 register(TransactionFactory)
 register(CommentFactory)
+register(TransactionTypeFactory)
+register(CategoryFactory)
+register(SubcategoryFactory)
 
 
 @pytest.fixture

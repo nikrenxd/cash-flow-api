@@ -44,3 +44,29 @@ class CommentFactory(DjangoModelFactory):
 
     class Meta:
         model = "comments.Comment"
+
+
+class TransactionTypeFactory(DjangoModelFactory):
+    name = Sequence(lambda n: f"{constants.CUSTOM_TRANSACTION_TYPE}{n}")
+    user = SubFactory(CustomUserFactory)
+
+    class Meta:
+        model = "transaction_types.TransactionType"
+
+
+class CategoryFactory(DjangoModelFactory):
+    name = Sequence(lambda n: f"{constants.CUSTOM_CATEGORY}{n}")
+    user = SubFactory(CustomUserFactory)
+    transaction_type = SubFactory(TransactionTypeFactory)
+
+    class Meta:
+        model = "categories.Category"
+
+
+class SubcategoryFactory(DjangoModelFactory):
+    name = Sequence(lambda n: f"{constants.CUSTOM_SUBCATEGORY}{n}")
+    user = SubFactory(CustomUserFactory)
+    category = SubFactory(CategoryFactory)
+
+    class Meta:
+        model = "subcategories.Subcategory"
