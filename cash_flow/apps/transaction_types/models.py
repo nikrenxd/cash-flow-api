@@ -4,7 +4,7 @@ from cash_flow.common.models import BaseModel
 
 
 class TransactionType(BaseModel):
-    name = models.CharField(max_length=125, unique=True)
+    name = models.CharField(max_length=125)
     description = models.TextField(blank=True, null=True)
     user = models.ForeignKey(
         "users.CustomUser",
