@@ -15,8 +15,32 @@ class TransactionStatusSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
 
 
+class TransactionTransactionTypeSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
+
+class TransactionSubcategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
+
+class TransactionCategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
+
 class TransactionSerializer(serializers.ModelSerializer):
     status = TransactionStatusSerializer(read_only=True)
+    transaction_type = TransactionTransactionTypeSerializer(
+        read_only=True,
+        source="subcategory.category.transaction_type",
+    )
+    subcategory = TransactionSubcategorySerializer(read_only=True)
+    category = TransactionCategorySerializer(
+        read_only=True,
+        source="subcategory.category",
+    )
 
     class Meta:
         model = Transaction
@@ -24,6 +48,9 @@ class TransactionSerializer(serializers.ModelSerializer):
             "id",
             "amount",
             "date",
+            "transaction_type",
+            "subcategory",
+            "category",
             "status",
             "created_at",
             "updated_at",
@@ -53,10 +80,16 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
     status_id = serializers.IntegerField(required=True, allow_null=False)
+    subcategory_id = serializers.IntegerField(required=True, allow_null=False)
 
     class Meta:
         model = Transaction
-        fields = ("amount", "transaction_date", "status_id")
+        fields = (
+            "amount",
+            "transaction_date",
+            "status_id",
+            "subcategory_id",
+        )
 
     def validate_transaction_date(self, value: datetime.date) -> datetime.date:
         if value is not None and value > datetime.date.today():

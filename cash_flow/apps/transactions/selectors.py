@@ -6,8 +6,23 @@ from cash_flow.apps.transactions.models import Transaction
 
 class TransactionSelector:
     def list_transactions(self, user_id: int) -> QuerySet[Transaction]:
-        return Transaction.objects.select_related("user", "status").filter(
-            user=user_id
+        return (
+            Transaction.objects.select_related(
+                "status",
+                "subcategory__category__transaction_type",
+            )
+            .filter(user=user_id)
+            .only(
+                "id",
+                "amount",
+                "date",
+                "created_at",
+                "updated_at",
+                "status__name",
+                "subcategory__category__name",
+                "subcategory__category__transaction_type__name",
+                "subcategory__name",
+            )
         )
 
     def list_transactions_comments(self, user_id: int) -> QuerySet[Transaction]:
