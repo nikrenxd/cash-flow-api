@@ -21,6 +21,7 @@ class SubcategoryViewSet(viewsets.ModelViewSet):
         IsCategoryBelongsToUser,
     )
     serializer_class = SubcategorySerializer
+    http_method_names = ["get", "post", "put", "delete"]
 
     def get_queryset(self):
         return SubcategorySelector().list_subcategories(
