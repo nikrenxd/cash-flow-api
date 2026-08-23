@@ -18,6 +18,6 @@ class CategorySelector:
 
     def get_category(self, category_id: int) -> Category:
         try:
-            return Category.objects.get(id=category_id)
+            return Category.objects.select_related("user").get(id=category_id)
         except Category.DoesNotExist as e:
             raise CategoryObjectDoesNotExist from e
