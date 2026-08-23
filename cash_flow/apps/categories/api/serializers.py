@@ -1,13 +1,15 @@
 from rest_framework import serializers
 
 from cash_flow.apps.categories.models import Category
-from cash_flow.apps.transaction_types.api.serializers import (
-    TransactionTypeSerializer,
-)
+
+
+class CategoryTransactionTypeSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    transaction_type = TransactionTypeSerializer()
+    transaction_type = CategoryTransactionTypeSerializer()
 
     class Meta:
         model = Category
@@ -15,6 +17,25 @@ class CategorySerializer(serializers.ModelSerializer):
             "id",
             "name",
             "transaction_type",
+        )
+
+
+class CategorySubcategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    transaction_type = CategoryTransactionTypeSerializer()
+    subcategories = CategorySubcategorySerializer(many=True)
+
+    class Meta:
+        model = Category
+        fields = (
+            "id",
+            "name",
+            "transaction_type",
+            "subcategories",
         )
 
 

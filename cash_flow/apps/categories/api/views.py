@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from cash_flow.apps.categories.api.serializers import (
     CategoryCreateSerializer,
+    CategoryDetailSerializer,
     CategorySerializer,
     CategoryUpdateSerializer,
 )
@@ -41,6 +42,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
                 return CategoryCreateSerializer
             case "update":
                 return CategoryUpdateSerializer
+            case "retrieve":
+                return CategoryDetailSerializer
 
         return super().get_serializer_class()
 
