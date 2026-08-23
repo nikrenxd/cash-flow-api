@@ -3,10 +3,17 @@ from rest_framework import serializers
 from cash_flow.apps.subcategories.models import Subcategory
 
 
+class SubcategoryCategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+
+
 class SubcategorySerializer(serializers.ModelSerializer):
+    category = SubcategoryCategorySerializer()
+
     class Meta:
         model = Subcategory
-        fields = ("id", "name")
+        fields = ("id", "name", "category")
 
 
 class SubcategoryCreateSerializer(serializers.ModelSerializer):
