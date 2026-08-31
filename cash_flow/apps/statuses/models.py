@@ -20,5 +20,5 @@ class Status(BaseModel):
         ordering = ["-created_at"]
         db_table = "statuses"
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return f"name: {self.name}; user: {self.user};"

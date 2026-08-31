@@ -16,3 +16,6 @@ class TransactionType(BaseModel):
     class Meta:
         db_table = "transaction_types"
         ordering = ("-created_at",)
+
+    def __str__(self) -> str:
+        return f"name: {self.name}; user: {self.user.email};"

@@ -26,7 +26,10 @@ class Transaction(BaseModel):
     )
 
     def __str__(self):
-        return f"Transaction with id: {self.id}; Amount: {self.amount};"
+        return (
+            f"id: {self.id}; amount: {self.amount}; "
+            f"status: {self.status.name}; subcategory: {self.subcategory.name};"
+        )
 
     class Meta:
         indexes = [

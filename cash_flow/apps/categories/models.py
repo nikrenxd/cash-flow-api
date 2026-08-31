@@ -21,3 +21,6 @@ class Category(BaseModel):
     class Meta:
         db_table = "categories"
         ordering = ("-created_at",)
+
+    def __str__(self) -> str:
+        return f"name: {self.name}; {self.transaction_type}; user: {self.user};"

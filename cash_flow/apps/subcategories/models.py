@@ -20,3 +20,6 @@ class Subcategory(BaseModel):
     class Meta:
         db_table = "subcategories"
         ordering = ("-created_at",)
+
+    def __str__(self) -> str:
+        return f"name: {self.name}; category: {self.category.name}; user: {self.user.email};"

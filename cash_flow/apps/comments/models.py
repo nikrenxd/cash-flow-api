@@ -21,3 +21,6 @@ class Comment(BaseModel):
         indexes = [Index(fields=["created_at"])]
         ordering = ["-created_at"]
         db_table = "comments"
+
+    def __str__(self) -> str:
+        return f"transaction_id: {self.transaction.id}; user: {self.user};"
