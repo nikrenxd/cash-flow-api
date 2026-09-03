@@ -12,6 +12,10 @@ from cash_flow.apps.transactions.api.serializers import (
     TransactionSerializer,
     TransactionUpdateSerializer,
 )
+from cash_flow.apps.transactions.dto import (
+    TransactionCreateDto,
+    TransactionUpdateDto,
+)
 from cash_flow.apps.transactions.exceptions import (
     TransactionBadRequest,
     TransactionCreationError,
@@ -50,11 +54,13 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         data = serializer.validated_data
-        user_id = self.request.user.id
-        data["user_id"] = user_id
+        dto = TransactionCreateDto(
+            **data,
+            user_id=self.request.user.id,
+        )
 
         try:
-            new_transaction = TransactionService().create_transaction(**data)
+            new_transaction = TransactionService().create_transaction(data=dto)
             serializer.instance = new_transaction
         except TransactionCreationError as e:
             raise TransactionBadRequest from e
@@ -64,11 +70,12 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         data = serializer.validated_data
         transaction = serializer.instance
+        dto = TransactionUpdateDto(**data)
 
         try:
             serializer.instance = TransactionService().update_transaction(
                 transaction,
-                **data,
+                data=dto,
             )
         except TransactionUpdateError as e:
             raise TransactionBadRequest from e
