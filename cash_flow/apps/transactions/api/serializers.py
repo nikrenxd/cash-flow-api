@@ -69,8 +69,6 @@ class TransactionDetailSerializer(serializers.ModelSerializer):
             "date",
             "status",
             "comments",
-            "created_at",
-            "updated_at",
         )
 
 
@@ -85,11 +83,15 @@ class TransactionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = (
+            "id",
             "amount",
             "transaction_date",
             "status_id",
             "subcategory_id",
         )
+        extra_kwargs = {
+            "id": {"read_only": True},
+        }
 
     def validate_transaction_date(self, value: datetime.date) -> datetime.date:
         if value is not None and value > datetime.date.today():
