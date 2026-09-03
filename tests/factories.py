@@ -25,27 +25,6 @@ class StatusFactory(DjangoModelFactory):
         model = "statuses.Status"
 
 
-class TransactionFactory(DjangoModelFactory):
-    amount = factory.Faker("pydecimal", left_digits=5, right_digits=2)
-    date = factory.Faker("date")
-
-    user = SubFactory(CustomUserFactory)
-    status = SubFactory(StatusFactory)
-
-    class Meta:
-        model = "transactions.Transaction"
-
-
-class CommentFactory(DjangoModelFactory):
-    body = factory.Faker("text", max_nb_chars=200)
-
-    user = SubFactory(CustomUserFactory)
-    transaction = SubFactory(TransactionFactory)
-
-    class Meta:
-        model = "comments.Comment"
-
-
 class TransactionTypeFactory(DjangoModelFactory):
     name = Sequence(lambda n: f"{constants.CUSTOM_TRANSACTION_TYPE}{n}")
     user = SubFactory(CustomUserFactory)
@@ -70,3 +49,25 @@ class SubcategoryFactory(DjangoModelFactory):
 
     class Meta:
         model = "subcategories.Subcategory"
+
+
+class TransactionFactory(DjangoModelFactory):
+    amount = factory.Faker("pydecimal", left_digits=5, right_digits=2)
+    date = factory.Faker("date")
+
+    user = SubFactory(CustomUserFactory)
+    status = SubFactory(StatusFactory)
+    subcategory = SubFactory(SubcategoryFactory)
+
+    class Meta:
+        model = "transactions.Transaction"
+
+
+class CommentFactory(DjangoModelFactory):
+    body = factory.Faker("text", max_nb_chars=200)
+
+    user = SubFactory(CustomUserFactory)
+    transaction = SubFactory(TransactionFactory)
+
+    class Meta:
+        model = "comments.Comment"
