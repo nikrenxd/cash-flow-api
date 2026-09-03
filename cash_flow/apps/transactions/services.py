@@ -1,6 +1,4 @@
 import logging
-from datetime import date
-from decimal import Decimal
 
 from django.db import transaction
 
@@ -8,6 +6,10 @@ from cash_flow.apps.statuses.models import Status
 from cash_flow.apps.statuses.selectors import StatusSelector
 from cash_flow.apps.subcategories.models import Subcategory
 from cash_flow.apps.subcategories.selectors import SubcategorySelector
+from cash_flow.apps.transactions.dto import (
+    TransactionCreateDto,
+    TransactionUpdateDto,
+)
 from cash_flow.apps.transactions.exceptions import (
     TransactionCreationError,
     TransactionUpdateError,
@@ -44,31 +46,24 @@ class TransactionService:
         return subcategory
 
     @transaction.atomic
-    def create_transaction(
-        self,
-        amount: Decimal,
-        user_id: int,
-        status_id: int,
-        subcategory_id: int,
-        transaction_date: date | None = None,
-    ) -> Transaction:
-        logger.info(f"Creating new transaction for user with id: {user_id}")
+    def create_transaction(self, data: TransactionCreateDto) -> Transaction:
+        logger.info(f"Creating new transaction for user with id: {data.user_id}")
 
-        status = self._ensure_status_belongs_to_user(status_id, user_id)
+        status = self._ensure_status_belongs_to_user(data.status_id, data.user_id)
         if not status:
             raise TransactionCreationError("Failed to create new transaction")
 
         subcategory = self._ensure_subcategory_belongs_to_user(
-            subcategory_id,
-            user_id,
+            data.subcategory_id,
+            data.user_id,
         )
         if not subcategory:
             raise TransactionCreationError("Failed to create new transaction")
 
         new_transaction = Transaction(
-            amount=amount,
-            date=transaction_date,
-            user_id=user_id,
+            amount=data.amount,
+            date=data.transaction_date,
+            user_id=data.user_id,
             status=status,
             subcategory=subcategory,
         )
@@ -81,39 +76,36 @@ class TransactionService:
     @transaction.atomic
     def update_transaction(
         self,
-        _transaction: Transaction,
-        status_id: int | None = None,
-        subcategory_id: int | None = None,
-        amount: Decimal | None = None,
-        transaction_date: date | None = None,
+        transaction_to_update: Transaction,
+        data: TransactionUpdateDto,
     ) -> Transaction:
-        logger.info(f"Updating transaction with new amount: {amount}")
+        logger.info(f"Updating transaction with new amount: {data.amount}")
 
-        if status_id is not None:
+        if data.status_id is not None:
             status = self._ensure_status_belongs_to_user(
-                status_id,
-                _transaction.user_id,
+                data.status_id,
+                transaction_to_update.user_id,
             )
             if not status:
                 raise TransactionUpdateError("Failed to update transaction")
-            _transaction.status = status
+            transaction_to_update.status = status
 
-        if subcategory_id is not None:
+        if data.subcategory_id is not None:
             subcategory = self._ensure_subcategory_belongs_to_user(
-                subcategory_id,
-                _transaction.user_id,
+                data.subcategory_id,
+                transaction_to_update.user_id,
             )
             if not subcategory:
                 raise TransactionUpdateError("Failed to update transaction")
-            _transaction.subcategory = subcategory
+            transaction_to_update.subcategory = subcategory
 
-        if amount is not None:
-            _transaction.amount = amount
+        if data.amount is not None:
+            transaction_to_update.amount = data.amount
 
-        if transaction_date is not None:
-            _transaction.date = transaction_date
+        if data.transaction_date is not None:
+            transaction_to_update.date = data.transaction_date
 
-        _transaction.full_clean()
-        _transaction.save()
+        transaction_to_update.full_clean()
+        transaction_to_update.save()
 
-        return _transaction
+        return transaction_to_update
