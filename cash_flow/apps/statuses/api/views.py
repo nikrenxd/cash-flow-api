@@ -28,6 +28,7 @@ class StatusViewSet(viewsets.ModelViewSet):
         IsAuthenticated,
         IsOwnerOrDefaultObjectPermission,
     )
+    http_method_names = ["get", "post", "patch", "delete"]
 
     def get_queryset(self):
         user_id = self.request.user.id
