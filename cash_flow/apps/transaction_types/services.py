@@ -1,5 +1,9 @@
 from django.db import transaction
 
+from cash_flow.apps.transaction_types.dto import (
+    TransactionTypeCreateDto,
+    TransactionTypeUpdateDto,
+)
 from cash_flow.apps.transaction_types.models import TransactionType
 
 
@@ -7,14 +11,12 @@ class TransactionTypeService:
     @transaction.atomic
     def create_transaction_type(
         self,
-        tt_name: str,
-        user_id: int | None = None,
-        tt_description: str | None = None,
+        data: TransactionTypeCreateDto,
     ) -> TransactionType:
         new_transaction_type = TransactionType(
-            name=tt_name,
-            description=tt_description,
-            user_id=user_id,
+            name=data.name,
+            description=data.description,
+            user_id=data.user_id,
         )
 
         new_transaction_type.full_clean()
@@ -26,13 +28,12 @@ class TransactionTypeService:
     def update_transaction_type(
         self,
         transaction_type: TransactionType,
-        tt_name: str | None = None,
-        tt_description: str | None = None,
+        data: TransactionTypeUpdateDto,
     ) -> TransactionType:
-        if tt_name is not None:
-            transaction_type.name = tt_name
-        if tt_description is not None:
-            transaction_type.description = tt_description
+        if data.name is not None:
+            transaction_type.name = data.name
+        if data.description is not None:
+            transaction_type.description = data.description
 
         transaction_type.full_clean()
         transaction_type.save()
