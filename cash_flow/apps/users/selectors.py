@@ -13,20 +13,25 @@ class UserSelector:
     def list_users(self) -> QuerySet[User]:
         return User.objects.all()
 
+    def get_user_by_id_for_delete(self, id: int) -> User:
+        try:
+            return User.objects.select_for_update().get(id=id)
+        except User.DoesNotExist:
+            raise UserObjectDoesNotExist
+
     def get_user_by_email(self, email: str) -> User | None:
         try:
             return User.objects.get(email=email)
         except User.DoesNotExist as e:
             raise UserObjectDoesNotExist from e
 
-    def get_user_by_uuid(self, uuid: str, token: str) -> User | None:
+    def get_activation_user_by_id(self, user_id: int, token: str) -> User | None:
         try:
-            user = User.objects.select_related("email_id").get(
-                email_id__email_uuid=uuid
-            )
+            user = User.objects.get(id=user_id)
+
             if not default_token_generator.check_token(user, token):
                 logger.warning(f"Invalid activation token for user: {user.id}")
-                return None
+                raise User.DoesNotExist
 
             return user
 
