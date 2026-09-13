@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
@@ -12,14 +13,21 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from cash_flow.apps.users.api.serializers import (
-    UserActivateResponseSerializer,
     UserCreateSerializer,
-    UserNotActivateResponseSerializer,
 )
-from cash_flow.apps.users.exceptions import UserObjectDoesNotExist
+from cash_flow.apps.users.exceptions import (
+    UserActivationIdExpired,
+    UserForActivationNotFound,
+    UserIsAlreadyActivated,
+    UserIsAlreadyActive,
+)
 from cash_flow.apps.users.selectors import UserSelector
-from cash_flow.apps.users.services.users_actions import UserService
-from cash_flow.apps.users.tasks import task_send_activation_email
+from cash_flow.apps.users.services.activation_token import ActivationTokenService
+from cash_flow.apps.users.services.user import UserService
+from cash_flow.apps.users.tasks import (
+    task_delete_not_active_user,
+    task_send_activation_email,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +40,21 @@ class UserViewSet(GenericViewSet, CreateModelMixin):
     def perform_create(self, serializer: UserCreateSerializer) -> None:
         data = serializer.validated_data
         user = UserService().create_user(**data)
+        activation_service = ActivationTokenService()
+
+        email_token = str(activation_service.set_email_id_token(user_id=user.id))
+        activation_service.set_activation_user_id(
+            email_id=email_token,
+            user_id=user.id,
+        )
+
         serializer.instance = user
 
         task_send_activation_email.delay(email=user.email)
+        task_delete_not_active_user.apply_async(
+            args=(user.id,),
+            countdown=settings.ACTIVATION_EMAIL_ID_TTL,
+        )
 
     @action(
         methods=["GET"],
@@ -53,34 +73,19 @@ class UserViewSet(GenericViewSet, CreateModelMixin):
 
 @extend_schema(tags=["users"])
 class UserActivateView(APIView):
-    @extend_schema(
-        request=None,
-        responses={
-            200: UserActivateResponseSerializer,
-            400: UserNotActivateResponseSerializer,
-            404: UserNotActivateResponseSerializer,
-        },
-    )
     def get(self, request: Request, uuid: str, token: str) -> Response:
         try:
-            user = UserSelector().get_user_by_uuid(uuid=uuid, token=token)
-        except UserObjectDoesNotExist as e:
-            raise NotFound(detail="User not found or invalid activation link") from e
-
-        if user is None:
-            raise NotFound(detail="Invalid activation link")
-
-        if user.is_active:
-            return Response(
-                {
-                    "details": "User has been already active",
-                    "activated": True,
-                },
-                status=status.HTTP_200_OK,
+            user_id = ActivationTokenService().retrieve_activation_user_id(
+                email_id=uuid
             )
-
-        UserService().update_user_active_status(user=user)
-        logger.info(f"User: {user.id} has been activated")
+            UserService().update_user_active_status(
+                user_id=user_id,
+                token=token,
+            )
+        except (UserForActivationNotFound, UserActivationIdExpired) as e:
+            raise NotFound(detail="User not found or invalid activation link") from e
+        except UserIsAlreadyActive as e:
+            raise UserIsAlreadyActivated from e
 
         return Response(
             {

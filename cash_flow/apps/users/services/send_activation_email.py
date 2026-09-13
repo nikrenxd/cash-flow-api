@@ -10,17 +10,17 @@ from cash_flow.common.send_email import send_email
 logger = logging.getLogger(__name__)
 
 
-def _prepare_confirmation_link(user: User) -> str:
+def _prepare_confirmation_link(user: User, email_id: str) -> str:
     token = default_token_generator.make_token(user)
     activation_path = reverse(
         "activate",
-        kwargs={"uuid": user.email_id, "token": token},
+        kwargs={"uuid": email_id, "token": token},
     )
     return f"{settings.SITE_URL}{activation_path}"
 
 
-def send_activation_email(user: User) -> None:
-    confirmation_link = _prepare_confirmation_link(user)
+def send_activation_email(user: User, email_id: str) -> None:
+    confirmation_link = _prepare_confirmation_link(user, email_id)
     context = {
         "username": user.email,
         "confirmation_link": confirmation_link,
