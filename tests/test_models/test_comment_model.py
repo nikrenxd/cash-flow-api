@@ -9,7 +9,7 @@ pytestmark = pytest.mark.django_db
 
 @pytest.mark.parametrize("parameter_name", ("body", "user_id", "transaction_id"))
 def test_not_null_constraint(parameter_name: str, comment_factory):
-    relation_name = Comment._meta.label_lower.replace(".", "_")
+    relation_name = Comment._meta.db_table
 
     with pytest.raises(IntegrityError) as err:
         comment_factory(**{parameter_name: None})

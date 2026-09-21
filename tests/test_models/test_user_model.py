@@ -18,7 +18,7 @@ pytestmark = pytest.mark.django_db
     ),
 )
 def test_not_null_constraint(parameter_name: str, custom_user_factory):
-    relation_name = CustomUser._meta.label_lower.replace(".", "_")
+    relation_name = CustomUser._meta.db_table
 
     with pytest.raises(IntegrityError) as err:
         custom_user_factory(**{parameter_name: None})
