@@ -1,5 +1,6 @@
 from django.db import transaction
 
+from cash_flow.apps.categories.dto import CreateCategoryDto, UpdateCategoryDto
 from cash_flow.apps.categories.models import Category
 
 
@@ -7,14 +8,12 @@ class CategoryService:
     @transaction.atomic
     def create_category(
         self,
-        category_name: str,
-        transaction_type_id: int,
-        user_id: int,
+        data: CreateCategoryDto,
     ) -> Category:
         new_category = Category(
-            name=category_name,
-            transaction_type_id=transaction_type_id,
-            user_id=user_id,
+            name=data.name,
+            transaction_type_id=data.transaction_type_id,
+            user_id=data.user_id,
         )
 
         new_category.full_clean()
@@ -26,13 +25,12 @@ class CategoryService:
     def update_category(
         self,
         category: Category,
-        transaction_type_id: int,
-        category_name: str | None = None,
+        data: UpdateCategoryDto,
     ) -> Category:
-        category.transaction_type_id = transaction_type_id
+        category.transaction_type_id = data.transaction_type_id
 
-        if category_name is not None:
-            category.name = category_name
+        if data.category_name is not None:
+            category.name = data.category_name
 
         category.full_clean()
         category.save()

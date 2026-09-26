@@ -8,6 +8,7 @@ from cash_flow.apps.categories.api.serializers import (
     CategorySerializer,
     CategoryUpdateSerializer,
 )
+from cash_flow.apps.categories.dto import CreateCategoryDto, UpdateCategoryDto
 from cash_flow.apps.categories.permissions import (
     IsTransactionTypeBelongToUser,
 )
@@ -50,19 +51,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         data = serializer.validated_data
-
-        serializer.instance = CategoryService().create_category(
-            category_name=data["name"],
-            transaction_type_id=self.kwargs["transaction_type_id"],
+        dto = CreateCategoryDto(
             user_id=self.request.user.id,
+            transaction_type_id=self.kwargs.get("transaction_type_id"),
+            **data,
         )
+
+        serializer.instance = CategoryService().create_category(data=dto)
 
     def perform_update(self, serializer):
         data = serializer.validated_data
+        dto = UpdateCategoryDto(**data)
         category_to_update = serializer.instance
 
         serializer.instance = CategoryService().update_category(
             category=category_to_update,
-            category_name=data.get("name", None),
-            transaction_type_id=data.get("transaction_type_id", None),
+            data=dto,
         )
