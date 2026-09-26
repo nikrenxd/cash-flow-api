@@ -12,6 +12,7 @@ from cash_flow.apps.statuses.api.serializers import (
     StatusSerializer,
     StatusUpdateSerializer,
 )
+from cash_flow.apps.statuses.dto import CreateStatusDto, UpdateStatusDto
 from cash_flow.apps.statuses.filters import StatusFilter
 from cash_flow.apps.statuses.selectors import StatusSelector
 from cash_flow.apps.statuses.services import StatusService
@@ -50,17 +51,18 @@ class StatusViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         data = serializer.validated_data
-        data["user_id"] = self.request.user.id
+        dto = CreateStatusDto(user_id=self.request.user.id, **data)
 
-        serializer.instance = StatusService().create_status(**data)
+        serializer.instance = StatusService().create_status(data=dto)
 
     def perform_update(self, serializer):
         data = serializer.validated_data
+        dto = UpdateStatusDto(**data)
         status_for_update = serializer.instance
 
         serializer.instance = StatusService().update_status(
             status=status_for_update,
-            **data,
+            data=dto,
         )
 
     @extend_schema(
