@@ -1,17 +1,19 @@
 from django.db import transaction
 
+from cash_flow.apps.subcategories.dto import (
+    CreateSubcategoryDto,
+    UpdateSubcategoryDto,
+)
 from cash_flow.apps.subcategories.models import Subcategory
 
 
 class SubcategoryService:
     @transaction.atomic
-    def create(
-        self, subcategory_name: str, user_id: int, category_id: int
-    ) -> Subcategory:
+    def create_subcategory(self, data: CreateSubcategoryDto) -> Subcategory:
         new_subcategory = Subcategory(
-            name=subcategory_name,
-            user_id=user_id,
-            category_id=category_id,
+            name=data.name,
+            user_id=data.user_id,
+            category_id=data.category_id,
         )
 
         new_subcategory.full_clean()
@@ -20,14 +22,13 @@ class SubcategoryService:
         return new_subcategory
 
     @transaction.atomic
-    def update(
+    def update_subcategory(
         self,
         subcategory: Subcategory,
-        subcategory_name: str,
-        category_id: int,
+        data: UpdateSubcategoryDto,
     ) -> Subcategory:
-        subcategory.name = subcategory_name
-        subcategory.category_id = category_id
+        subcategory.name = data.name
+        subcategory.category_id = data.category_id
 
         subcategory.full_clean()
         subcategory.save()

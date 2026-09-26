@@ -7,6 +7,10 @@ from cash_flow.apps.subcategories.api.serializers import (
     SubcategorySerializer,
     SubcategoryUpdateSerializer,
 )
+from cash_flow.apps.subcategories.dto import (
+    CreateSubcategoryDto,
+    UpdateSubcategoryDto,
+)
 from cash_flow.apps.subcategories.permissions import IsCategoryBelongsToUser
 from cash_flow.apps.subcategories.selectors import SubcategorySelector
 from cash_flow.apps.subcategories.services import SubcategoryService
@@ -40,19 +44,19 @@ class SubcategoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         data = serializer.validated_data
-
-        serializer.instance = SubcategoryService().create(
-            subcategory_name=data.get("name"),
+        dto = CreateSubcategoryDto(
             user_id=self.request.user.id,
             category_id=self.kwargs.get("category_id"),
+            **data,
         )
+        serializer.instance = SubcategoryService().create_subcategory(data=dto)
 
     def perform_update(self, serializer):
         data = serializer.validated_data
+        dto = UpdateSubcategoryDto(**data)
         subcategory_to_update = serializer.instance
 
-        serializer.instance = SubcategoryService().update(
+        serializer.instance = SubcategoryService().update_subcategory(
             subcategory=subcategory_to_update,
-            subcategory_name=data.get("name"),
-            category_id=data.get("category_id"),
+            data=dto,
         )
