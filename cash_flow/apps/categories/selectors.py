@@ -5,7 +5,7 @@ from cash_flow.apps.categories.models import Category
 
 
 class CategorySelector:
-    def none_category(self) -> None:
+    def none_category(self) -> QuerySet:
         return Category.objects.none()
 
     def list_categories(
