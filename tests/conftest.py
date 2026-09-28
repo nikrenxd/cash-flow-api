@@ -67,3 +67,12 @@ def default_category(category_factory, default_transaction_type) -> Category:
         transaction_type=default_transaction_type,
         user=None,
     )
+
+
+@pytest.fixture(autouse=True)
+def set_dummy_cache_backend(settings):
+    settings.CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+        },
+    }
