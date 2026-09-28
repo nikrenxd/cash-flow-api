@@ -27,7 +27,7 @@ class TestTransactionTypeEndpoints:
         response = authenticated_client.get(reverse(self.transaction_type_view_name))
 
         assert response.status_code == 200
-        for instance in response.json():
+        for instance in response.json()["results"]:
             assert instance in expected
 
     def test_retrieve(

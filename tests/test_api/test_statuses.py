@@ -23,7 +23,7 @@ class TestStatusEndpoints:
         response = authenticated_client.get(reverse(self.status_view_name))
 
         assert response.status_code == 200
-        for instance in response.json():
+        for instance in response.json()["results"]:
             assert instance in expected
 
     def test_retrieve(self, authenticated_client: APIClient, status: Status) -> None:
