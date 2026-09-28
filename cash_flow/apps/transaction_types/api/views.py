@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from cash_flow.apps.transaction_types.api.serializers import (
@@ -19,6 +20,10 @@ from cash_flow.common.permissions import (
 )
 
 
+class TransactionTypePageNumberPagination(PageNumberPagination):
+    page_size = 10
+
+
 @extend_schema(tags=["transaction types"])
 class TransactionTypeViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionTypeSerializer
@@ -26,6 +31,7 @@ class TransactionTypeViewSet(viewsets.ModelViewSet):
         IsAuthenticated,
         IsOwnerOrDefaultObjectPermission,
     )
+    pagination_class = TransactionTypePageNumberPagination
 
     def get_queryset(self):
         return TransactionTypeSelector().list_transaction_types(
