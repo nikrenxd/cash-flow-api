@@ -1,0 +1,54 @@
+services:
+  database:
+    image: postgres:18-alpine3.23
+    container_name: cf-postgresdb-dev
+    env_file:
+      - ../.env.dev
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - cash-flow
+
+  redis:
+    image: redis:8-alpine3.21
+    container_name: cf-redis-dev
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - cash-flow
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: cf-rabbit-dev
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_DEFAULT_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RMQ_DEFAULT_VHOST}
+    ports:
+      - "${RMQ_PORT}:5672"
+      - "${RMQ_DASHBOARD_PORT}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - cash-flow
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - "${MAILPIT_WEB_PORT}:8025"
+      - "${MAILPIT_SMTP_PORT}:1025"
+
+
+volumes:
+  pgdata:
+  rabbitmq-data:
+networks:
+  cash-flow:
+    driver: bridge
+
