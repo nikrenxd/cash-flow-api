@@ -33,6 +33,18 @@ class CustomUserManager(BaseUserManager["CustomUser"]):
 
         return self.create_user(email, password, **extra_fields)
 
+    def get_or_none(self, id: int) -> "CustomUser | None":
+        try:
+            return self.get(id=id)
+        except self.model.DoesNotExist:
+            return None
+
+    def get_by_email(self, user_email: str) -> "CustomUser | None":
+        try:
+            return self.get(email=user_email)
+        except self.model.DoesNotExist:
+            return None
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=155, unique=True)

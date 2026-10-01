@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, ErrorDetail
 
 from cash_flow.common.exceptions import ObjectDoesNotExist
 
@@ -22,9 +22,9 @@ class UserIsAlreadyActive(Exception):
 
 class UserIsAlreadyActivated(APIException):
     status_code = status.HTTP_409_CONFLICT
-    detail = "User is already active"
+    detail = ErrorDetail("User is already active")
 
 
 class UserActivationUrlIsInvalid(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
-    detail = "Invalid activation link"
+    detail = ErrorDetail("Invalid activation link")

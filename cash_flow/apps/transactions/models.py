@@ -3,6 +3,14 @@ from django.db import models
 from cash_flow.common.models import BaseModel
 
 
+class TransactionManager(models.Manager["Transaction"]):
+    def get_or_none(self, id: int) -> "Transaction | None":
+        try:
+            return self.get(id=id)
+        except self.model.DoesNotExist:
+            return None
+
+
 class Transaction(BaseModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(blank=True, null=True)
@@ -24,6 +32,8 @@ class Transaction(BaseModel):
         null=True,
         blank=True,
     )
+
+    objects = TransactionManager()
 
     def __str__(self):
         return (

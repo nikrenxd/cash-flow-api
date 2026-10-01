@@ -16,7 +16,14 @@ logger = logging.getLogger(__name__)
 def task_send_activation_email(email: str) -> None:
     try:
         user = UserSelector().get_user_by_email(email=email)
+        if user is None:
+            raise UserObjectDoesNotExist(f"User with email: {email} does not exist")
+
         email_id = ActivationTokenService().retrieve_email_id_token(user_id=user.id)
+        if email_id is None:
+            raise UserObjectDoesNotExist(
+                f"Failed to get user activation token for user with email: {email}"
+            )
         send_activation_email(
             user=user,
             email_id=email_id,

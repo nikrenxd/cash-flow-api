@@ -18,4 +18,4 @@ class TransactionType(BaseModel):
         ordering = ("-created_at",)
 
     def __str__(self) -> str:
-        return f"name: {self.name}; user: {self.user.email};"
+        return f"name: {self.name};"

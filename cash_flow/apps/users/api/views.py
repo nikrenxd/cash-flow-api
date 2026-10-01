@@ -7,7 +7,6 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -37,7 +36,7 @@ class UserViewSet(GenericViewSet, CreateModelMixin):
     queryset = UserSelector().list_users()
     serializer_class = UserCreateSerializer
 
-    def perform_create(self, serializer: UserCreateSerializer) -> None:
+    def perform_create(self, serializer) -> None:
         data = serializer.validated_data
         user = UserService().create_user(**data)
         activation_service = ActivationTokenService()
@@ -61,10 +60,10 @@ class UserViewSet(GenericViewSet, CreateModelMixin):
         detail=False,
         permission_classes=[IsAuthenticated],
     )
-    def user_me(self, request: Request) -> Response:
+    def user_me(self, request) -> Response:
         return Response(
             {
-                "email": request.user.email,  # type: ignore
+                "email": request.user.email,
                 "is_authenticated": True,
             },
             status=status.HTTP_200_OK,
@@ -73,11 +72,16 @@ class UserViewSet(GenericViewSet, CreateModelMixin):
 
 @extend_schema(tags=["users"])
 class UserActivateView(APIView):
-    def get(self, request: Request, uuid: str, token: str) -> Response:
+    def get(self, request, uuid: str, token: str) -> Response:
         try:
             user_id = ActivationTokenService().retrieve_activation_user_id(
                 email_id=uuid
             )
+            if not user_id:
+                raise UserActivationIdExpired(
+                    f"User id for email_id - {uuid}, expired"
+                )
+
             UserService().update_user_active_status(
                 user_id=user_id,
                 token=token,

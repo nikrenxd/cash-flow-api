@@ -22,14 +22,13 @@ class UserService:
 
     @transaction.atomic
     def update_user_active_status(self, user_id: int, token: str) -> User | None:
-        try:
-            user = UserSelector().get_activation_user_by_id(
-                user_id=user_id,
-                token=token,
-            )
-        except UserObjectDoesNotExist as e:
-            logger.warning("User for activation was not found")
-            raise UserForActivationNotFound from e
+        user = UserSelector().get_activation_user_by_id(
+            user_id=user_id,
+            token=token,
+        )
+
+        if user is None:
+            raise UserForActivationNotFound("User for activation was not found")
 
         if user.is_active:
             raise UserIsAlreadyActive

@@ -16,24 +16,17 @@ class UserSelector:
     def get_user_by_id_for_delete(self, id: int) -> User:
         try:
             return User.objects.select_for_update().get(id=id)
-        except User.DoesNotExist:
-            raise UserObjectDoesNotExist
+        except User.DoesNotExist as e:
+            raise UserObjectDoesNotExist from e
 
     def get_user_by_email(self, email: str) -> User | None:
-        try:
-            return User.objects.get(email=email)
-        except User.DoesNotExist as e:
-            raise UserObjectDoesNotExist from e
+        return User.objects.get_by_email(user_email=email)
 
     def get_activation_user_by_id(self, user_id: int, token: str) -> User | None:
-        try:
-            user = User.objects.get(id=user_id)
+        user = User.objects.get_or_none(id=user_id)
 
-            if not default_token_generator.check_token(user, token):
-                logger.warning(f"Invalid activation token for user: {user.id}")
-                raise User.DoesNotExist
+        if not default_token_generator.check_token(user, token):
+            logger.warning(f"Invalid activation token for user: {user_id}")
+            return None
 
-            return user
-
-        except User.DoesNotExist as e:
-            raise UserObjectDoesNotExist from e
+        return user

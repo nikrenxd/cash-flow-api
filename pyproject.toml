@@ -28,6 +28,7 @@ dev = [
     "pytest-factoryboy>=2.8.1",
     "pytest>=9.0.1",
     "ruff>=0.14.5",
+    "types-django-filter>=26.1.0.20260713",
 ]
 
 [tool.ruff]
@@ -57,3 +58,4 @@ ignore_missing_imports = true
 
 [tool.django-stubs]
 django_settings_module = "cash_flow.root.settings"
+strict_settings = false

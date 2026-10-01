@@ -4,8 +4,6 @@ import uuid
 from django.conf import settings
 from django.core.cache import cache
 
-from cash_flow.apps.users.exceptions import UserActivationIdExpired
-
 logger = logging.getLogger(__name__)
 
 
@@ -39,12 +37,6 @@ class ActivationTokenService:
     def retrieve_activation_user_id(self, email_id: str) -> int | None:
         key = f"{settings.ACTIVATION_EMAIL_ID_PREFIX}:{email_id}"
         user_id = cache.get(key=key, default=None)
-
-        if not user_id:
-            logger.error(f"User id with key: {key}:{email_id} is expired")
-            raise UserActivationIdExpired(
-                f"User id for email_id - {email_id}, expired"
-            )
 
         cache.delete(key=key)
 

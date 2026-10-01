@@ -4,7 +4,6 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.request import Request
 from rest_framework.response import Response
 
 from cash_flow.apps.statuses.api.serializers import (
@@ -79,29 +78,31 @@ class StatusViewSet(viewsets.ModelViewSet):
         StatusCache().invalidate_status_cache(user_id=self.request.user.id)
         instance.delete()
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    def list(self, request, *args, **kwargs) -> Response:
         cache = StatusCache()
-        response = cache.read_status_cache(
-            user_id=self.request.user.id,
+        response_data = cache.read_status_cache(
+            user_id=request.user.id,
             query_params=self.request.query_params,
         )
-        if response is None:
+        response = Response(data=response_data)
+
+        if response.data is None:
             response = super().list(request, *args, **kwargs)
             cache.set_status_cache(
                 response_data=response.data,
-                user_id=self.request.user.id,
+                user_id=request.user.id,
                 query_params=self.request.query_params,
             )
             return response
 
-        return Response(data=response)
+        return response
 
     @extend_schema(
         tags=["statuses"],
         parameters=[OpenApiParameter("name", OpenApiTypes.STR, "query")],
     )
     @action(detail=False, methods=["GET"], url_path="user-statuses")
-    def list_custom_statuses(self, request: Request):
+    def list_custom_statuses(self, request):
         user_statuses = self.filter_queryset(self.get_queryset())
 
         serializer = self.get_serializer(user_statuses, many=True)

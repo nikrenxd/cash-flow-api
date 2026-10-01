@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import URLPattern, URLResolver, path
 from rest_framework.routers import DefaultRouter
 
 from cash_flow.apps.users.api.views import UserActivateView, UserViewSet
@@ -6,7 +6,7 @@ from cash_flow.apps.users.api.views import UserActivateView, UserViewSet
 users_router = DefaultRouter()
 
 users_router.register("users", UserViewSet, basename="users")
-urlpatterns = [
+urlpatterns: list[URLResolver | URLPattern] = [
     path(
         "activate/<uuid:uuid>/<str:token>/",
         UserActivateView.as_view(),

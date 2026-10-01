@@ -1,6 +1,5 @@
 from django.db.models import QuerySet
 
-from cash_flow.apps.transactions.exceptions import TransactionObjectDoesNotExist
 from cash_flow.apps.transactions.models import Transaction
 
 
@@ -29,10 +28,7 @@ class TransactionSelector:
         return self.list_transactions(user_id).prefetch_related("comments")
 
     def get_transaction(self, transaction_id: int) -> Transaction | None:
-        try:
-            return Transaction.objects.get(id=transaction_id)
-        except Transaction.DoesNotExist as e:
-            raise TransactionObjectDoesNotExist from e
+        return Transaction.objects.get_or_none(id=transaction_id)
 
     def is_transaction_exists(self, transaction_id: int, user_id: int) -> bool:
         return Transaction.objects.filter(id=transaction_id, user=user_id).exists()
