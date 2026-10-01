@@ -13,7 +13,7 @@ match ENV:
     case "production":
         load_dotenv(".env")
     case _:
-        raise RuntimeError(f"Unknown environment: {ENV}")
+        raise ValueError(f"Unknown environment: {ENV}")
 
 # Monkeypatching Django, so stubs will work for all generics,
 # see: https://github.com/typeddjango/django-stubs
