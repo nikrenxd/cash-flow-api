@@ -4,14 +4,21 @@ import django_stubs_ext
 from dotenv import load_dotenv
 from split_settings.tools import include, optional  # noqa
 
-load_dotenv()
+# Managing environments via `DJANGO_ENV` variable:
+ENV = os.environ.get("DJANGO_ENV", "development")
+
+match ENV:
+    case "development":
+        load_dotenv(".env.dev")
+    case "production":
+        load_dotenv(".env")
+    case _:
+        raise RuntimeError(f"Unknown environment: {ENV}")
 
 # Monkeypatching Django, so stubs will work for all generics,
 # see: https://github.com/typeddjango/django-stubs
 django_stubs_ext.monkeypatch()
 
-# Managing environments via `DJANGO_ENV` variable:
-ENV = os.environ.get("DJANGO_ENV", "development")
 
 base_settings = (
     "components/base.py",
